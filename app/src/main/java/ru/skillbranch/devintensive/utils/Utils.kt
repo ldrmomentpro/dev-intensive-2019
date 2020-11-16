@@ -5,7 +5,8 @@ import java.util.*
 
 object Utils {
 
-    private val translitMap = mapOf("А" to "A",
+    private val translitMap = mapOf(
+        "А" to "A",
         "Б" to "B",
         "В" to "V",
         "Г" to "G",
@@ -74,7 +75,7 @@ object Utils {
     fun parseFullName(fullName: String?) : Pair<String?, String?> {
         val parts: List<String>? = fullName?.trim()?.split(" ")
 
-        var firstName: String?
+        val firstName: String?
         var lastName: String?
 
         if (fullName.isNullOrBlank() || fullName=="" || fullName==" ") {
@@ -93,8 +94,8 @@ object Utils {
 
         val text = payload
         val sb = StringBuilder(text.length)
-        for (i in 0 until text.length) {
-            val l: String = payload.substring(i, i + 1)
+        for (i in text.indices) {
+            val l: String = payload.substring(i, i + 1).replace(" ", divider)
             if (translitMap.containsKey(l)) {
                 sb.append(translitMap[l])
             } else {
@@ -102,26 +103,35 @@ object Utils {
             }
         }
         return sb.toString()
+
     }
 
-    fun toInitials(firstName: String?, lastName: String?): String? {
-        val initFName: String?
-        val initLName: String?
-        if (firstName.isNullOrBlank() && lastName.isNullOrBlank()) {
-        return "null"
-        }
-        else if (firstName.isNullOrBlank() && !lastName.isNullOrBlank()) {
-            initLName = lastName.substring(0, 1)
-            return "$initLName"
-        }
-        else if (!firstName.isNullOrBlank() && lastName.isNullOrBlank()) {
-            initFName = firstName.substring(0, 1)
-            return "$initFName"
-        }
-        else {
-            initFName = firstName?.substring(0, 1)
-            initLName = lastName?.substring(0, 1)
-            return "$initFName$initLName"
-        }
+    fun toInitials(firstName: String?, lastName: String?): String? = when {
+        firstName.isNullOrBlank() && lastName.isNullOrBlank() -> null
+        !firstName.isNullOrBlank() && lastName.isNullOrBlank() -> firstName.trim().substring(0,1).toUpperCase()
+        firstName.isNullOrBlank() && !lastName.isNullOrBlank() -> lastName.trim().substring(0,1).toUpperCase()
+        !firstName.isNullOrBlank() && !lastName.isNullOrBlank() -> firstName.trim().substring(0,1).toUpperCase() + lastName.trim().substring(0,1).toUpperCase()
+        else -> throw IllegalStateException("Incorrect state in 'when' expression")
     }
+
+//    fun toInitials(firstName: String?, lastName: String?): String? {
+//        val initFName: String?
+//        val initLName: String?
+//        if (firstName.isNullOrBlank() && lastName.isNullOrBlank() && firstName==null && lastName==null) {
+//        return "null"
+//        }
+//        else if (firstName.isNullOrBlank() && !lastName.isNullOrBlank()) {
+//            initLName = lastName.substring(0, 1).toUpperCase()
+//            return "$initLName"
+//        }
+//        else if (!firstName.isNullOrBlank() && lastName.isNullOrBlank()) {
+//            initFName = firstName.substring(0, 1).toUpperCase()
+//            return "$initFName"
+//        }
+//        else {
+//            initFName = firstName?.substring(0, 1)?.toUpperCase()
+//            initLName = lastName?.substring(0, 1)?.toUpperCase()
+//            return "$initFName$initLName"
+//        }
+//    }
 }
