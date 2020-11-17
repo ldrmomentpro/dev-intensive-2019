@@ -1,6 +1,5 @@
 package ru.skillbranch.devintensive.extensions
 
-import android.text.Html
 
 fun String.truncate(cut: Int = 16): String {
 
@@ -8,3 +7,7 @@ fun String.truncate(cut: Int = 16): String {
     return text
 }
 
+fun String.stripHtml() = this
+    .replace(Regex("<[^>]*>"), "")
+    .replace(Regex("&amp;|&lt;|&gt;|&quot;|&apos;|&#\\d+;"), "")
+    .replace(Regex(" +"), " ")
