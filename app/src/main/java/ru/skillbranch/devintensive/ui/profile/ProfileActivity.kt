@@ -6,6 +6,8 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
@@ -59,6 +61,11 @@ class ProfileActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModel.getProfileDate().observe(this, Observer { updateUI(it) })
         viewModel.getTheme().observe(this, Observer { updateTheme(it) })
+        viewModel.getIsRepoError().observe(this, Observer { updateRepository(it) })
+    }
+
+    private fun updateRepository(isError: Boolean) {
+        if (isError) et_repository.text.clear()
     }
 
     private fun updateTheme(mode: Int) {
@@ -104,6 +111,8 @@ class ProfileActivity : AppCompatActivity() {
         showCurrentMode(isEditMode)
 
         btn_edit.setOnClickListener{
+            viewModel.onRepoEditCompleted(wr_repository.isErrorEnabled)
+
             if (isEditMode) saveProfileInfo()
             isEditMode = !isEditMode
             showCurrentMode(isEditMode)
@@ -143,6 +152,37 @@ class ProfileActivity : AppCompatActivity() {
             background.colorFilter = filter
             setImageDrawable(icon)
         }
+
+        if (isEdit) validateGithubUserUrl()
+        else {
+            if (wr_repository.isErrorEnabled) {
+                et_repository.setText("")
+                wr_repository.isErrorEnabled = false
+            }
+        }
+    }
+
+    private fun validateGithubUserUrl() {
+        et_repository.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (et_repository.text.toString().contains("^(http://|https://|)(www[\\.]|)github[\\.]com/\\w{1,38}(\\w{0,38})$".toRegex()) &&
+                    et_repository.text.toString().contains("^(http://|https://|)(www[\\.]|)github[\\.]com/.{1,39}".toRegex()) &&
+                    et_repository.text.toString().contains("^(http://|https://|)(www[\\.]|)github[\\.]com/(enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join)$".toRegex()).not()){
+                    wr_repository.isErrorEnabled = false
+                } else {
+                    wr_repository.isErrorEnabled = true
+                    wr_repository.setError("Невалидный адрес репозитория")
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        })
     }
 
     private fun saveProfileInfo() {
