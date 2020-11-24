@@ -9,6 +9,7 @@
     <color name="color_gray">#B9BCBB</color>
     <color name="color_gray_light">#DADADA</color>
     <color name="color_gray_dark">#8A8A8A</color>
+    <color name="color_white">#FFFFFF</color>
 
     <color name="color_divider_dark">#1F000000</color>
     <color name="color_divider_light">#1FFFFFFF</color>

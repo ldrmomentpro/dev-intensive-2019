@@ -7,6 +7,7 @@ import android.graphics.PorterDuffColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -20,6 +21,7 @@ import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.extensions.hideKeyboard
 import ru.skillbranch.devintensive.models.Bender
 import ru.skillbranch.devintensive.models.Profile
+import ru.skillbranch.devintensive.utils.Utils
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
 class ProfileActivity : AppCompatActivity() {
@@ -70,6 +72,20 @@ class ProfileActivity : AppCompatActivity() {
                 v.text = it[k].toString()
             }
         }
+        updateAvatar(profile)
+    }
+
+    private fun updateAvatar(profile: Profile) {
+        Utils.toInitials(profile.firstName, profile.lastName)?.let {
+            if (it != null) {
+                val color = TypedValue()
+                theme.resolveAttribute(R.attr.colorAccent, color, true)
+                with(iv_avatar) {
+                    setInitials(it)
+                    setBgColor(color.data)
+                }
+            }
+        } ?: iv_avatar.setImageResource(R.drawable.avatar_default)
     }
 
     private fun initViews(savedInstanceState: Bundle?) {
