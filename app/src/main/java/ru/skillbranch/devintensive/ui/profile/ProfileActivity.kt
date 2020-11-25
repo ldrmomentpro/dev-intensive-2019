@@ -173,6 +173,7 @@ class ProfileActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (et_repository.text.toString().contains("^(http://|https://|)(www[\\.]|)github[\\.]com/\\w{1,38}(\\w{0,38})$".toRegex()) &&
                     et_repository.text.toString().contains("^(http://|https://|)(www[\\.]|)github[\\.]com/.{1,39}".toRegex()) &&
+                    et_repository.text.toString().last().toString().equals("-").not() &&
                     et_repository.text.toString().contains("^(http://|https://|)(www[\\.]|)github[\\.]com/(enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join)$".toRegex()).not()){
                     wr_repository.isErrorEnabled = false
                 } else {
