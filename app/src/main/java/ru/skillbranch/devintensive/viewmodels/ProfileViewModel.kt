@@ -26,7 +26,7 @@ class ProfileViewModel : ViewModel() {
         Log.d("M_ProfileViewModel","view model cleared")
     }
 
-    fun getProfileDate(): LiveData<Profile> = profileData
+    fun getProfileData(): LiveData<Profile> = profileData
 
     fun getTheme(): LiveData<Int> = appTheme
 

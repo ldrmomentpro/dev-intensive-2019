@@ -28,6 +28,8 @@ import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
 class ProfileActivity : AppCompatActivity() {
 
+    private val stId = 10
+
     companion object{
         const val IS_EDIT_MODE = "IS_EDIT_MODE"
     }
@@ -59,7 +61,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun initViewModel(){
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        viewModel.getProfileDate().observe(this, Observer { updateUI(it) })
+        viewModel.getProfileData().observe(this, Observer { updateUI(it) })
         viewModel.getTheme().observe(this, Observer { updateTheme(it) })
         viewModel.getIsRepoError().observe(this, Observer { updateRepository(it) })
     }
